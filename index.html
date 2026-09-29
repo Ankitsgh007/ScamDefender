@@ -1,13 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Free iPhone Offer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ScamDefender - phishing and scam website detection testing dashboard">
+<title>ScamDefender | Website Security Scanner</title>
+<style>
+:root{
+  --bg:#07111f;--panel:#0c1929;--panel2:#101f33;--line:#1d3855;
+  --text:#eef6ff;--muted:#8fa5bd;--blue:#45a3ff;--blue2:#167ff0;
+  --green:#36d399;--yellow:#ffbf47;--red:#ff5b6e;--shadow:0 24px 70px rgba(0,0,0,.32)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:
+radial-gradient(circle at 80% 0%,rgba(48,130,210,.16),transparent 32%),var(--bg);color:var(--text)}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.container{width:min(1120px,calc(100% - 36px));margin:auto}
+header{height:76px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center}
+.nav{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px;font-size:21px;font-weight:800}
+.logo{width:42px;height:42px;border-radius:12px;object-fit:contain;background:#fff;padding:3px}
+.navlinks{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:13px}
+.pill{border:1px solid #285078;border-radius:999px;padding:7px 11px;color:#9dceff}
+.hero{padding:76px 0 45px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;background:#0d2137;border:1px solid #1d4265;color:#9dcfff;font-size:12px;font-weight:700}
+.eyedot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+h1{font-size:clamp(42px,7vw,76px);line-height:.98;letter-spacing:-3px;margin:22px 0 20px}
+h1 span{color:var(--blue)}
+.hero>p{max-width:700px;margin:auto;color:var(--muted);font-size:17px;line-height:1.75}
+.scanner{max-width:900px;margin:38px auto 0;padding:8px;border:1px solid #1c3856;background:rgba(12,25,41,.9);border-radius:22px;box-shadow:var(--shadow);text-align:left}
+.inputbox{display:flex;gap:10px;padding:9px}
+.inputwrap{flex:1;position:relative}
+.inputwrap span{position:absolute;left:16px;top:15px;color:#718aa4}
+input{width:100%;height:54px;border-radius:13px;border:1px solid #284965;background:#071522;color:white;padding:0 16px 0 44px;outline:none}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(69,163,255,.1)}
+.scanbtn{height:54px;padding:0 23px;border:0;border-radius:13px;background:linear-gradient(135deg,#258ff5,#126bd0);color:white;font-weight:800;box-shadow:0 8px 24px rgba(22,127,240,.24)}
+.scanbtn:hover{filter:brightness(1.08)}
+.samples{padding:2px 14px 12px;color:#647c95;font-size:11px}
+.samples button{background:none;border:0;color:#7faed8;padding:0;margin-right:12px}
+.result{display:none;margin:8px;padding:22px;border-radius:16px;background:#091522;border:1px solid #203d5b}
+.result.show{display:block}
+.result.safe{border-color:rgba(54,211,153,.45)}
+.result.warn{border-color:rgba(255,191,71,.5)}
+.result.danger{border-color:rgba(255,91,110,.55)}
+.resulthead{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
+.status{display:flex;gap:12px;align-items:center}
+.statusdot{width:13px;height:13px;border-radius:50%;background:var(--green);box-shadow:0 0 16px rgba(54,211,153,.55);flex:none}
+.warn .statusdot{background:var(--yellow);box-shadow:0 0 16px rgba(255,191,71,.45)}
+.danger .statusdot{background:var(--red);box-shadow:0 0 16px rgba(255,91,110,.45)}
+.status h2{font-size:20px;margin:0 0 5px}
+.status p{margin:0;color:var(--muted);font-size:13px}
+.score{min-width:92px;text-align:center;padding:10px;border:1px solid var(--line);border-radius:12px}
+.score strong{display:block;font-size:24px}
+.score small{color:var(--muted)}
+.checkgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+.check{padding:14px;border-radius:12px;background:#0d2034;border:1px solid #1b3855}
+.checkicon{font-size:18px}
+.check b{display:block;margin:7px 0 4px;font-size:13px}
+.check span{color:var(--muted);font-size:11px;line-height:1.4}
+.section{padding:40px 0}
+.sectiontitle{text-align:center;margin-bottom:25px}
+.sectiontitle h2{font-size:30px;margin:0 0 8px}
+.sectiontitle p{color:var(--muted);margin:0}
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{padding:23px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(180deg,#0d1c2e,#0a1726)}
+.cardicon{font-size:25px;margin-bottom:15px}
+.card h3{font-size:16px;margin:0 0 8px}
+.card p{font-size:13px;line-height:1.65;color:var(--muted);margin:0}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.step{padding:22px;border:1px solid var(--line);border-radius:16px;background:#0b1929}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#12365b;color:#9dceff;font-weight:800;font-size:13px;margin-bottom:14px}
+.step h3{margin:0 0 7px;font-size:15px}
+.step p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+.disclaimer{margin:40px 0 15px;padding:16px 18px;border-radius:13px;background:#0c1b2c;border:1px solid #1c3855;color:#8097af;font-size:12px;line-height:1.6;text-align:center}
+footer{padding:28px 0 40px;border-top:1px solid rgba(255,255,255,.06);color:#637991;font-size:12px;text-align:center}
+@media(max-width:850px){.features,.checkgrid{grid-template-columns:repeat(2,1fr)}.navlinks{display:none}}
+@media(max-width:600px){.container{width:min(100% - 24px,1120px)}.hero{padding-top:55px}h1{letter-spacing:-2px}.inputbox{flex-direction:column}.scanbtn{width:100%}.features,.checkgrid,.how{grid-template-columns:1fr}.resulthead{flex-direction:column}.score{width:100%}}
+</style>
 </head>
 <body>
-  <h1>Congratulations!</h1>
-  <p>You’ve won a Free iPhone! 🎁</p>
-  <p>Click here to claim your prize.</p>
-  <a href="http://phishy.xyz">phishy.xyz</a>
+<header>
+  <div class="container nav">
+    <div class="brand">
+      <img class="logo" src="icon.png" alt="ScamDefender">
+      <span>ScamDefender</span>
+    </div>
+    <div class="navlinks">
+      <span>Phishing Detection</span>
+      <span>Real-time Analysis</span>
+      <span class="pill">Security Demo</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow"><span class="eyedot"></span> Browser Security Testing Dashboard</div>
+    <h1>Detect scams before<br><span>you click.</span></h1>
+    <p>ScamDefender analyzes a website URL for common phishing signals including suspicious URL patterns, risky domains, HTTPS status and scam-related content indicators.</p>
+
+    <div class="scanner">
+      <div class="inputbox">
+        <div class="inputwrap">
+          <span>🔗</span>
+          <input id="url" placeholder="Enter a website URL..." autocomplete="off">
+        </div>
+        <button class="scanbtn" id="scan">Scan Website</button>
+      </div>
+      <div class="samples">
+        Try demo:
+        <button data-sample="https://www.google.com">google.com</button>
+        <button data-sample="http://192.168.1.10/login">IP login</button>
+        <button data-sample="https://winiphone-freegift.xyz">suspicious domain</button>
+      </div>
+
+      <div class="result" id="result">
+        <div class="resulthead">
+          <div class="status">
+            <span class="statusdot"></span>
+            <div>
+              <h2 id="statusTitle">Analysis complete</h2>
+              <p id="statusText"></p>
+            </div>
+          </div>
+          <div class="score"><strong id="score">0</strong><small>risk score</small></div>
+        </div>
+        <div class="checkgrid">
+          <div class="check"><div class="checkicon">🔗</div><b>URL Heuristic</b><span id="urlResult"></span></div>
+          <div class="check"><div class="checkicon">🔒</div><b>HTTPS Check</b><span id="httpsResult"></span></div>
+          <div class="check"><div class="checkicon">🧠</div><b>Content Scanner</b><span id="contentResult"></span></div>
+          <div class="check"><div class="checkicon">🗃️</div><b>Known Patterns</b><span id="patternResult"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="sectiontitle">
+      <h2>How ScamDefender checks a website</h2>
+      <p>The dashboard mirrors the detection concepts implemented in the extension.</p>
+    </div>
+    <div class="features">
+      <article class="card"><div class="cardicon">🔗</div><h3>Suspicious URL Detection</h3><p>Flags IP-based URLs, selected risky TLDs and common look-alike spellings such as g00gle or paypa1.</p></article>
+      <article class="card"><div class="cardicon">🔒</div><h3>HTTPS Verification</h3><p>Checks whether the website is using HTTPS and reports a warning when the URL uses an insecure protocol.</p></article>
+      <article class="card"><div class="cardicon">🧠</div><h3>Scam Content Scanner</h3><p>Looks for scam phrases such as “Congratulations”, “Win iPhone”, “Claim Prize” and “Free Gift”.</p></article>
+      <article class="card"><div class="cardicon">🚨</div><h3>Instant Warning</h3><p>The extension can show a warning when one or more suspicious signals are detected on the current page.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="sectiontitle">
+      <h2>Simple three-step protection</h2>
+      <p>Designed to make suspicious websites easier to recognize.</p>
+    </div>
+    <div class="how">
+      <div class="step"><div class="num">01</div><h3>Enter a URL</h3><p>Paste the website address you want to test into the scanner above.</p></div>
+      <div class="step"><div class="num">02</div><h3>Analyze signals</h3><p>ScamDefender evaluates URL structure, protocol and known scam indicators.</p></div>
+      <div class="step"><div class="num">03</div><h3>Review the result</h3><p>Use the risk result and individual checks before sharing credentials or sensitive information.</p></div>
+    </div>
+    <div class="disclaimer">⚠️ <strong>Demo limitation:</strong> This Vercel webpage is a frontend testing interface. It cannot inspect another website's DOM from the browser because of normal web security restrictions. The actual Chrome extension performs content scanning on pages where its content script runs.</div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">🛡️ ScamDefender &nbsp;•&nbsp; Phishing & Scam Detection Project &nbsp;•&nbsp; Built for security testing and demonstration</div>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const urlInput = $("url");
+
+function normalizeUrl(value){
+  value = value.trim();
+  if(!/^https?:\/\//i.test(value)) value = "https://" + value;
+  return value;
+}
+
+function analyze(value){
+  let url;
+  try { url = new URL(normalizeUrl(value)); }
+  catch(e){
+    return {valid:false};
+  }
+
+  const full = url.href;
+  const host = url.hostname.toLowerCase();
+
+  // These checks mirror the patterns in the uploaded content script.
+  const ipPattern = /^[0-9]{1,3}(\.[0-9]{1,3}){3}$/;
+  const riskyTld = /(\.xyz|\.top|\.ru|\.tk)$/i;
+  const typoPattern = /(g00gle|paypa1|faceb00k|instagrarn)/i;
+
+  const ip = ipPattern.test(host);
+  const tld = riskyTld.test(host);
+  const typo = typoPattern.test(host);
+  const insecure = url.protocol !== "https:";
+
+  // The content script scans page text. On this standalone page we cannot
+  // read the remote site's DOM, so we expose the limitation honestly.
+  const scamKeywordInUrl = /(congratulations|win[-_ ]?iphone|claim[-_ ]?prize|free[-_ ]?gift)/i.test(full);
+
+  let score = 0;
+  if(ip) score += 35;
+  if(tld) score += 25;
+  if(typo) score += 40;
+  if(insecure) score += 25;
+  if(scamKeywordInUrl) score += 20;
+  score = Math.min(score,100);
+
+  const flags = ip || tld || typo || insecure || scamKeywordInUrl;
+  let level = flags ? (score >= 60 ? "danger" : "warn") : "safe";
+
+  return {valid:true,host,ip,tld,typo,insecure,scamKeywordInUrl,score,level};
+}
+
+function render(value){
+  const r = analyze(value);
+  const box = $("result");
+  box.className = "result show";
+
+  if(!r.valid){
+    box.classList.add("danger");
+    $("statusTitle").textContent = "Invalid URL";
+    $("statusText").textContent = "Enter a valid website address such as https://example.com.";
+    $("score").textContent = "—";
+    $("urlResult").textContent = "Could not parse the URL.";
+    $("httpsResult").textContent = "Not checked.";
+    $("contentResult").textContent = "Not checked.";
+    $("patternResult").textContent = "Not checked.";
+    return;
+  }
+
+  box.classList.add(r.level);
+  $("score").textContent = r.score + "%";
+
+  if(r.level === "safe"){
+    $("statusTitle").textContent = "No obvious warning signals";
+    $("statusText").textContent = "The URL did not match the suspicious patterns tested by this demo.";
+  }else if(r.level === "warn"){
+    $("statusTitle").textContent = "Potentially suspicious";
+    $("statusText").textContent = "One or more warning signals were detected. Verify the website before entering sensitive information.";
+  }else{
+    $("statusTitle").textContent = "High-risk URL pattern detected";
+    $("statusText").textContent = "Multiple suspicious signals were detected. Do not enter passwords, OTPs or payment details until verified.";
+  }
+
+  $("urlResult").textContent =
+    (r.ip? "IP-based URL detected. " : "") +
+    (r.tld? "Risky TLD matched. " : "") +
+    (r.typo? "Look-alike spelling detected." : (!r.ip && !r.tld ? "No configured URL pattern matched." : ""));
+  $("httpsResult").textContent = r.insecure ? "Not using HTTPS." : "HTTPS detected.";
+  $("contentResult").textContent = r.scamKeywordInUrl
+    ? "Scam phrase found in the URL."
+    : "Remote page content is not accessible from this demo.";
+  $("patternResult").textContent = r.typo
+    ? "Known typo pattern matched."
+    : (r.tld ? "Configured risky TLD matched." : "No configured pattern matched.");
+}
+
+$("scan").addEventListener("click",()=>{
+  if(!urlInput.value.trim()){urlInput.focus();return;}
+  render(urlInput.value);
+});
+
+urlInput.addEventListener("keydown",e=>{
+  if(e.key==="Enter") $("scan").click();
+});
+
+document.querySelectorAll("[data-sample]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    urlInput.value = btn.dataset.sample;
+    render(btn.dataset.sample);
+  });
+});
+</script>
 </body>
 </html>
